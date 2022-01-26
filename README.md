@@ -1,6 +1,6 @@
 ## Introduction
 TSC printer sdk for node js
-<img src="https://github.com/ThinhVu/tsc-printer-js/blob/main/sample.jpg?raw=true" alt="xp-printer">
+<img src="https://img5541.weyesimg.com/uploads/rsirawa8.allweyes.com/images/15528756532485.png" alt="Xprinter">
 
 ### Installation
 
