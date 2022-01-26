@@ -4,7 +4,7 @@
  *
  *   0. You just DO WHAT THE FUCK YOU WANT TO.*/
 
-class TscPrinter {
+ class TscPrinter {
   constructor(device) {
     this.device = device
   }
@@ -46,7 +46,7 @@ class TscPrinter {
         inEndpoint.stopPoll(function () {
           iface.release(() => {
             console.log('usb print finished !');
-            closeConnection();
+            // closeConnection();  // Commented due to Avoid error : "abort core dumped on linux" & "abort strap 6" on mac
             resolve();
           })
         })
@@ -97,6 +97,101 @@ class TscPrinter {
         return reject(err);
       })
     })
+  }
+
+  Writev2(arr_data) {
+
+    // DIRECT THERMAL PRINTER * LABEL PRINTER * 
+    // # MODEL XPRINTER 
+
+    const _t = this;
+    return new Promise(async (resolve, reject) => {
+      _t.device.open();
+      let iface = _t.device.interface(0);
+
+      function closeConnection() {
+        if (iface) {
+          try {
+            _t.device.close();
+          } catch (e) {
+            setTimeout(closeConnection, 1000)
+          }
+        }
+      }
+
+      if (/^linux/.test(process.platform) || /^android/.test(process.platform)) {
+        console.log('Linux!!!');
+        if (iface.isKernelDriverActive()) {
+          try {
+            iface.detachKernelDriver();
+          } catch (e) {
+            console.error("[ERROR] Could not detach kernel driver: %s", e)
+          }
+        }
+      }
+
+      iface.claim();
+
+      let outEndpoint = iface.endpoints.find(endpoint => endpoint.direction === 'out');
+      let inEndpoint = iface.endpoints.find(endpoint => endpoint.direction === 'in');
+
+      function _resolve(print_result) {
+        inEndpoint.stopPoll(function () {
+          iface.release(() => {
+            console.log('USB PRINT COMPLETE!');
+            closeConnection();  // Commented due to Avoid error : "abort core dumped on linux" & "abort strap 6" on mac
+            resolve(print_result);
+          })
+        })
+      }
+
+      inEndpoint.startPoll(2, 8);
+
+      await arr_data.map((data, index) => {
+
+          // WRITING DATA
+          outEndpoint.transfer(data, err => {
+            console.log('RECEIVED DATA BUFFER : ', data);
+
+            if(arr_data.length -1 == index){
+              _resolve({success : true})
+            }
+
+            if(err){
+              _resolve({success : false, err})
+            }
+            
+          });
+    
+          outEndpoint.on('error', function (e) {
+            console.warn(e);
+            closeConnection();
+            return reject(err);
+          })
+
+          // RECEIVED DATA
+          inEndpoint.on('data', function (data) {
+            
+            // if (!finish && data.length !== 0) {
+            //   finish = true;
+            //   if (transfered)
+            //     _resolve();
+            // }
+          })
+    
+          inEndpoint.on('error', function (e) {
+            console.warn(e);
+            closeConnection();
+            return reject(err);
+          })
+
+      })
+    })
+  }
+
+  Close(){
+    const _t = this;
+    _t.device.close();
   }
 }
 
