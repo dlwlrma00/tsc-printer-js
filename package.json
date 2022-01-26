@@ -1,6 +1,6 @@
 {
-  "name": "tsc-printer-js",
-  "version": "1.0.1",
+  "name": "@dlwlrma00/tsc-printer-js",
+  "version": "1.0.2",
   "description": "Tsc Printer implement for nodejs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ThinhVu/tsc-printer-js.git"
+    "url": "https://github.com/dlwlrma00/tsc-printer-js"
   },
   "license": "WTFPL v3",
   "dependencies": {
