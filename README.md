@@ -6,7 +6,7 @@ TSC printer sdk for node js
 
 `npm i --save tsc-printer-js`
 
-Use Writev2() instead of Write() if you're experiencing (Error : Abort core dump - Linux/Ubuntu) & (Abort Strap 6 - MacOS)
+Use `Writev2()` instead of `Write()` if you're experiencing (Error : Abort core dump - Linux/Ubuntu) & (Abort Strap 6 - MacOS)
 
 
 ### References
