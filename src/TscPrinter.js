@@ -139,7 +139,7 @@
         inEndpoint.stopPoll(function () {
           iface.release(() => {
             console.log('USB PRINT COMPLETE!');
-            closeConnection();  // Commented due to Avoid error : "abort core dumped on linux" & "abort strap 6" on mac
+            // closeConnection();  // Commented due to Avoid error : "abort core dumped on linux" & "abort strap 6" on mac
             resolve(print_result);
           })
         })
@@ -153,19 +153,19 @@
           outEndpoint.transfer(data, err => {
             console.log('RECEIVED DATA BUFFER : ', data);
 
-            if(arr_data.length -1 == index){
-              _resolve({success : true})
-            }
+            // if(arr_data.length -1 == index){
+            //   _resolve({success : true})
+            // }
 
-            if(err){
-              _resolve({success : false, err})
-            }
+            // if(err){
+            //   _resolve({success : false, err})
+            // }
             
           });
     
           outEndpoint.on('error', function (e) {
             console.warn(e);
-            closeConnection();
+            // closeConnection();
             return reject(err);
           })
 
@@ -181,7 +181,7 @@
     
           inEndpoint.on('error', function (e) {
             console.warn(e);
-            closeConnection();
+            // closeConnection();
             return reject(err);
           })
 
