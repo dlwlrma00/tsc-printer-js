@@ -1,6 +1,6 @@
 {
   "name": "@dlwlrma00/tsc-printer-js",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Tsc Printer implement for nodejs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

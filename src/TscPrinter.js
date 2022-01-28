@@ -105,8 +105,12 @@
     // # MODEL XPRINTER 
 
     const _t = this;
+
     return new Promise(async (resolve, reject) => {
       _t.device.open();
+      console.log('DEVICE CONNECTION OPEN')
+
+
       let iface = _t.device.interface(0);
 
       function closeConnection() {
@@ -151,32 +155,34 @@
 
           // WRITING DATA
           outEndpoint.transfer(data, err => {
-            console.log('RECEIVED DATA BUFFER : ', data);
+            console.log('TRANSFER DATA BUFFER : ', data);
 
-            // if(arr_data.length -1 == index){
-            //   _resolve({success : true})
-            // }
+            if(arr_data.length -1 == index){
+              _resolve({success : true})
+            }
 
-            // if(err){
-            //   _resolve({success : false, err})
-            // }
+            if(err){
+              _resolve({success : false, err})
+            }
             
           });
     
           outEndpoint.on('error', function (e) {
             console.warn(e);
-            // closeConnection();
+            closeConnection();
             return reject(err);
           })
 
           // RECEIVED DATA
           inEndpoint.on('data', function (data) {
-            
-            // if (!finish && data.length !== 0) {
-            //   finish = true;
-            //   if (transfered)
-            //     _resolve();
-            // }
+
+            console.log('RECEIVING DATA ....')
+
+            if (!finish && data.length !== 0) {
+              finish = true;
+              if (transfered)
+                _resolve();
+            }
           })
     
           inEndpoint.on('error', function (e) {
@@ -192,7 +198,10 @@
   Close(){
     const _t = this;
     _t.device.close();
+
+    console.log('DEVICE CONNECTION CLOSE')
   }
+
 }
 
 module.exports = TscPrinter
